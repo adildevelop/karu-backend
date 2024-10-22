@@ -1,4 +1,5 @@
 flask
+gunicorn
 pylatex
 Flask-SQLAlchemy
 PyMySQL
