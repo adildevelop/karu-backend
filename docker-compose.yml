@@ -3,8 +3,7 @@ services:
   karu-app:
     build:
       context: .
-    volumes:
-      - ./:/app
+    restart: always
     environment:
       DB_TYPE: mysql+pymysql
       DB_HOST: karu-db
@@ -13,6 +12,8 @@ services:
       DB_PASSWORD: 123123
     ports:
       - '8000:8000'
+    volumes:
+      - ./:/app
     depends_on:
       - karu-db
   karu-db:
