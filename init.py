@@ -1,6 +1,5 @@
 import os
 from flask import Flask
-from
 from extensions import db
 
 def create_app():
