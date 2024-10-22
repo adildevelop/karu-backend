@@ -3,5 +3,6 @@ gunicorn
 pylatex
 Flask-SQLAlchemy
 PyMySQL
+psycopg2
 cryptography
 python-docx
