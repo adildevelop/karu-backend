@@ -1,0 +1,6 @@
+flask
+pylatex
+Flask-SQLAlchemy
+PyMySQL
+cryptography
+python-docx

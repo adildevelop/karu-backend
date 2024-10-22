@@ -1,0 +1,31 @@
+version: '3.3'
+services:
+  karu-app:
+    build:
+      context: .
+    volumes:
+      - ./:/app
+    environment:
+      DB_HOST: karu-db
+      DB_NAME: karu-docs
+      DB_USER: user
+      DB_PASSWORD: 123123
+    ports:
+      - '8000:8000'
+    depends_on:
+      - karu-db
+  karu-db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: karu-docs
+      MYSQL_USER: user
+      MYSQL_PASSWORD: 123123
+      MYSQL_ROOT_PASSWORD: 123123
+    ports:
+      - '3306:3306'
+    volumes:
+      - karu-docs-db:/var/lib/mysql
+# Names our volume
+volumes:
+  karu-docs-db:

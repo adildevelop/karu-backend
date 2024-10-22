@@ -1,0 +1,7 @@
+.idea
+.fleet
+.venv
+venv/
+__pycache__
+node_modules
+backend
