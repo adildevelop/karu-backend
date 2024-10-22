@@ -6,6 +6,7 @@ services:
     volumes:
       - ./:/app
     environment:
+      DB_TYPE: mysql+pymysql
       DB_HOST: karu-db
       DB_NAME: karu-docs
       DB_USER: user

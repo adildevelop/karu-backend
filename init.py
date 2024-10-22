@@ -1,10 +1,12 @@
 import os
 from flask import Flask
+from
 from extensions import db
 
 def create_app():
     app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://{}:{}@{}/{}'.format(
+    app.config['SQLALCHEMY_DATABASE_URI'] = '{}://{}:{}@{}/{}'.format(
+        os.getenv('DB_TYPE'),
         os.getenv('DB_USER'),
         os.getenv('DB_PASSWORD'),
         os.getenv('DB_HOST'),
