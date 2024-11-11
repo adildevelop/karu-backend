@@ -4,6 +4,7 @@ from extensions import db
 class Umk(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     token = db.Column(db.String(128), unique=True, nullable=False)
+    language = db.Column(db.String(10), nullable=False)
     faculty = db.Column(db.String(255), nullable=True)
     department = db.Column(db.String(255), nullable=True)
     subject = db.Column(db.String(255), nullable=True)
@@ -15,6 +16,7 @@ class Umk(db.Model):
     first_themes = db.Column(db.Text, nullable=True)
     first_lections = db.Column(db.String(255), nullable=True)
     first_seminars = db.Column(db.String(255), nullable=True)
+    first_labs = db.Column(db.String(255), nullable=True)
     first_srsps = db.Column(db.String(255), nullable=True)
     first_srss = db.Column(db.String(255), nullable=True)
     second_counts = db.Column(db.Integer, nullable=True)
@@ -66,18 +68,12 @@ class Umk(db.Model):
     def __repr__(self):
         return self.id
 
-def createUmk(faculty, department, subject, group, course, study_time, credits):
+def createUmk(language):
     rand_token = uuid4().hex
 
     umk = Umk(
-        token=rand_token,
-        faculty=faculty,
-        department=department,
-        subject=subject,
-        group=group,
-        course=course,
-        studyTime=study_time,
-        credits=credits,
+        token = rand_token,
+        language = language,
     )
 
     db.session.add(umk)
@@ -85,12 +81,28 @@ def createUmk(faculty, department, subject, group, course, study_time, credits):
 
     return rand_token
 
-def updateUmkFirst(token, counts, themes, lections, seminars, srsps, srss):
+def updateUmkIndex(token, faculty, department, subject, group, course, study_time, credits):
+    umk = Umk.query.filter_by(token=token).first()
+    umk.faculty = faculty
+    umk.department = department
+    umk.subject = subject
+    umk.group = group
+    umk.course = course
+    umk.studyTime = study_time
+    umk.credits = credits
+
+    db.session.add(umk)
+    db.session.commit()
+
+    return True
+
+def updateUmkFirst(token, counts, themes, lections, seminars, labs, srsps, srss):
     umk = Umk.query.filter_by(token=token).first()
     umk.first_counts = int(counts)
     umk.first_themes = themes
     umk.first_lections = lections
     umk.first_seminars = seminars
+    umk.first_labs = labs
     umk.first_srsps = srsps
     umk.first_srss = srss
 

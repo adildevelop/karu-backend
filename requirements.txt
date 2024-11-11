@@ -6,3 +6,4 @@ PyMySQL
 psycopg2
 cryptography
 python-docx
+pypdf

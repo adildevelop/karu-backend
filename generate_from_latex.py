@@ -1,8 +1,8 @@
 from pylatex import Document, Command, Package, TextBlock, NoEscape
-from docx import Document
+
 from umk import Umk
 
-def generateDokladnoi(name, date, faculty, dean, department, group, lesson_name, start_time, end_time):
+def generateDokladnoiFromLatex(name, date, faculty, dean, department, group, lesson_name, start_time, end_time):
     # Basic document
     geometry_options = {"margin": "0.5in"}
     doc = Document(geometry_options=geometry_options)
@@ -29,13 +29,12 @@ def generateDokladnoi(name, date, faculty, dean, department, group, lesson_name,
     with doc.create(TextBlock(70, 135, 120)):
         doc.append(f'{name}')
 
-    doc.generate_pdf('dokladnoi', compiler='pdflatex', clean_tex=False)
-    tex = doc.dumps()  # The document as string in LaTeX syntax
+    doc.generate_pdf('output/latex/dokladnoi', compiler='pdflatex', clean_tex=False)
 
-def generateUmk(token):
+def generateUmkFromLatex(token):
     umkDoc = Umk.query.filter_by(token=token).first()
 
-    tex = open("umk.tex", "r", encoding="utf-8")
+    tex = open("latex/umk_scratch.tex", "r", encoding="utf-8")
 
     doc = Document(data=NoEscape(tex.read()), geometry_options={"left": "20mm", "right": "20mm", "top": "15mm", "bottom": "15mm"})
     doc.documentclass = Command(
@@ -364,52 +363,4 @@ def generateUmk(token):
     doc.preamble.append(NoEscape(r'\def\acFxText{' + acTexts[10] + r'}'))
     doc.preamble.append(NoEscape(r'\def\acFText{' + acTexts[11] + r'}'))
 
-    doc.generate_pdf('umk_text', compiler='pdflatex', clean_tex=False)
-
-def generateDocx(token):
-    umkDoc = Umk.query.filter_by(token=token).first()
-
-    lss = umkDoc.sixth_lss.split('; ')
-    lps = umkDoc.sixth_lps.split('; ')
-
-    document = Document()
-
-    document.add_heading('Document Title', 0)
-
-    p = document.add_paragraph('A plain paragraph having some ')
-    p.add_run('bold').bold = True
-    p.add_run(' and some ')
-    p.add_run('italic.').italic = True
-
-    document.add_heading('Heading, level 1', level=1)
-    document.add_paragraph('Intense quote', style='Intense Quote')
-
-    document.add_paragraph(
-        'first item in unordered list', style='List Bullet'
-    )
-    document.add_paragraph(
-        'first item in ordered list', style='List Number'
-    )
-
-    records = (
-        (3, '101', 'Spam'),
-        (7, '422', 'Eggs'),
-        (4, '631', 'Spam, spam, eggs, and spam')
-    )
-
-    table = document.add_table(rows=1, cols=3)
-    hdr_cells = table.rows[0].cells
-    hdr_cells[0].text = 'Qty'
-    hdr_cells[1].text = 'Id'
-    hdr_cells[2].text = 'Desc'
-    for qty, id, desc in records:
-        row_cells = table.add_row().cells
-        row_cells[0].text = str(qty)
-        row_cells[1].text = id
-        row_cells[2].text = lss[0] + lps[0]
-
-    document.add_page_break()
-
-    document.save('demo.docx')
-
-    return token
+    doc.generate_pdf('output/latex/umk', compiler='pdflatex', clean_tex=False)

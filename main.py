@@ -1,8 +1,9 @@
 from flask import request, send_file, jsonify
 from init import create_app
 from extensions import db
-from umk import createUmk, updateUmkFirst, updateUmkSecond, updateUmkThird, updateUmkFourth, updateUmkFifth, updateUmkSixth, updateUmkSeventh, updateUmkEighth, updateUmkNinth, updateUmkTenth, updateUmkEleventh, updateUmkTwelfth
-from pylatexDoc import generateDokladnoi, generateUmk, generateDocx
+from umk import createUmk, updateUmkIndex, updateUmkFirst, updateUmkSecond, updateUmkThird, updateUmkFourth, updateUmkFifth, updateUmkSixth, updateUmkSeventh, updateUmkEighth, updateUmkNinth, updateUmkTenth, updateUmkEleventh, updateUmkTwelfth
+from generate_from_latex import generateDokladnoiFromLatex
+from generate_from_word import generateUmkFromWord
 
 app = create_app()
 
@@ -18,23 +19,32 @@ def dokladnoi():
     input_start_time = request.args.get('start_time', '')
     input_end_time = request.args.get('end_time', '')
 
-    generateDokladnoi(input_name, input_date, input_faculty, input_dean, input_department, input_group, input_lesson_name, input_start_time, input_end_time)
+    generateDokladnoiFromLatex(input_name, input_date, input_faculty, input_dean, input_department, input_group, input_lesson_name, input_start_time, input_end_time)
 
-    return send_file('dokladnoi.pdf')
+    return send_file('output/latex/dokladnoi.pdf')
 
-@app.route("/umk")
+@app.route("/umk", methods = ['POST'])
 def umk():
-    input_faculty = request.args.get('faculty', '')
-    input_department = request.args.get('department', '')
-    input_subject = request.args.get('subject', '')
-    input_group = request.args.get('group', '')
-    input_course = request.args.get('course', '')
-    input_study_time = request.args.get('study_time', '')
-    input_credits = request.args.get('credits', '')
+    input_language = request.form.get('language', '')
 
-    token = createUmk(input_faculty, input_department, input_subject, input_group, input_course, input_study_time, input_credits)
+    token = createUmk(input_language)
 
     return token
+
+@app.route("/umk-index", methods = ['POST'])
+def umk_index():
+    token = request.headers.get('Umk-token')
+    input_faculty = request.form.get('faculty', '')
+    input_department = request.form.get('department', '')
+    input_subject = request.form.get('subject', '')
+    input_group = request.form.get('group', '')
+    input_course = request.form.get('course', '')
+    input_study_time = request.form.get('study_time', '')
+    input_credits = request.form.get('credits', '')
+
+    updateUmkIndex(token, input_faculty, input_department, input_subject, input_group, input_course, input_study_time, input_credits)
+
+    return jsonify(success=True)
 
 @app.route("/umk/first", methods = ['POST'])
 def umk_first():
@@ -43,10 +53,11 @@ def umk_first():
     input_themes = request.form.get('themes', '')
     input_lections = request.form.get('lections', '')
     input_seminars = request.form.get('seminars', '')
+    input_labs = request.form.get('labs', '')
     input_srsps = request.form.get('srsps', '')
     input_srss = request.form.get('srss', '')
 
-    updateUmkFirst(token, input_counts, input_themes, input_lections, input_seminars, input_srsps, input_srss)
+    updateUmkFirst(token, input_counts, input_themes, input_lections, input_seminars, input_labs, input_srsps, input_srss)
 
     return jsonify(success=True)
 
@@ -190,15 +201,15 @@ def umk_twelfth():
 
     updateUmkTwelfth(token, input_texts)
 
-    generateUmk(token)
+    generateUmkFromWord(token)
 
-    return send_file('umk_text.pdf')
+    return send_file('output/word/umk.pdf')
 
 @app.route("/umk/docx", methods = ['POST'])
 def umk_docx():
     token = request.headers.get('Umk-token')
 
-    return generateDocx(token)
+    return generateUmkFromWord(token)
 
 if __name__ == "__main__":
     with app.app_context():
