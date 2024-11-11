@@ -72,12 +72,12 @@ def generateUmkFromWord(token):
     p.paragraph_format.first_line_indent = Pt(22.7)
     p.paragraph_format.line_spacing = 1
 
-    themes = umkDoc.first_themes.split('; ')
-    lections = umkDoc.first_lections.split('; ')
-    seminars = umkDoc.first_seminars.split('; ')
-    labs = umkDoc.first_labs.split('; ')
-    srsps = umkDoc.first_srsps.split('; ')
-    srss = umkDoc.first_srss.split('; ')
+    themes = umkDoc.first_themes.split('/;-;/ ')
+    lections = umkDoc.first_lections.split('/;-;/ ')
+    seminars = umkDoc.first_seminars.split('/;-;/ ')
+    labs = umkDoc.first_labs.split('/;-;/ ')
+    srsps = umkDoc.first_srsps.split('/;-;/ ')
+    srss = umkDoc.first_srss.split('/;-;/ ')
 
     tableWidth = 170
 
@@ -135,7 +135,7 @@ def generateUmkFromWord(token):
     p.paragraph_format.first_line_indent = Pt(22.7)
     p.paragraph_format.line_spacing = 1
 
-    lecturers = umkDoc.second_lecturers.split('; ')
+    lecturers = umkDoc.second_lecturers.split('/;-;/ ')
 
     for i in lecturers:
         p = document.add_paragraph(i)
@@ -249,8 +249,8 @@ def generateUmkFromWord(token):
     p.paragraph_format.first_line_indent = Pt(22.7)
     p.paragraph_format.line_spacing = 1
 
-    loss = umkDoc.third_los.split('; ')
-    methods = umkDoc.third_methods.split('; ')
+    loss = umkDoc.third_los.split('/;-;/ ')
+    methods = umkDoc.third_methods.split('/;-;/ ')
 
     table = document.add_table(rows=1, cols=3)
     table.style = 'Table Grid'
@@ -325,8 +325,8 @@ def generateUmkFromWord(token):
     p.paragraph_format.first_line_indent = Pt(22.7)
     p.paragraph_format.line_spacing = 1
 
-    bls = umkDoc.fifth_bls.split('; ')
-    als = umkDoc.fifth_als.split('; ')
+    bls = umkDoc.fifth_bls.split('/;-;/ ')
+    als = umkDoc.fifth_als.split('/;-;/ ')
 
     table = document.add_table(rows=1, cols=2)
     table.style = 'Table Grid'
@@ -371,8 +371,8 @@ def generateUmkFromWord(token):
     p.paragraph_format.first_line_indent = Pt(22.7)
     p.paragraph_format.line_spacing = 1
 
-    lss = umkDoc.sixth_lss.split('; ')
-    lps = umkDoc.sixth_lps.split('; ')
+    lss = umkDoc.sixth_lss.split('/;-;/ ')
+    lps = umkDoc.sixth_lps.split('/;-;/ ')
 
     table = document.add_table(rows=1, cols=3)
     table.style = 'Table Grid'
@@ -403,10 +403,10 @@ def generateUmkFromWord(token):
     p.paragraph_format.first_line_indent = Pt(22.7)
     p.paragraph_format.line_spacing = 1
 
-    spss = umkDoc.seventh_spss.split('; ')
-    spqs = umkDoc.seventh_spqs.split('; ')
-    sprs = umkDoc.seventh_sprs.split('; ')
-    spls = umkDoc.seventh_spls.split('; ')
+    spss = umkDoc.seventh_spss.split('/;-;/ ')
+    spqs = umkDoc.seventh_spqs.split('/;-;/ ')
+    sprs = umkDoc.seventh_sprs.split('/;-;/ ')
+    spls = umkDoc.seventh_spls.split('/;-;/ ')
 
     table = document.add_table(rows=1, cols=5)
     table.style = 'Table Grid'
@@ -442,9 +442,9 @@ def generateUmkFromWord(token):
     p.paragraph_format.line_spacing = 1
 
     if umkDoc.eighth_counts is not None and umkDoc.eighth_counts > 0:
-        slabs = umkDoc.eighth_slabs.split('; ')
-        qlabs = umkDoc.eighth_qlabs.split('; ')
-        rlabs = umkDoc.eighth_rlabs.split('; ')
+        slabs = umkDoc.eighth_slabs.split('/;-;/ ')
+        qlabs = umkDoc.eighth_qlabs.split('/;-;/ ')
+        rlabs = umkDoc.eighth_rlabs.split('/;-;/ ')
 
         table = document.add_table(rows=1, cols=4)
         table.style = 'Table Grid'
@@ -483,9 +483,9 @@ def generateUmkFromWord(token):
     p.paragraph_format.first_line_indent = Pt(22.7)
     p.paragraph_format.line_spacing = 1
 
-    sropss = umkDoc.ninth_sropss.split('; ')
-    sropqs = umkDoc.ninth_sropqs.split('; ')
-    sroprs = umkDoc.ninth_sroprs.split('; ')
+    sropss = umkDoc.ninth_sropss.split('/;-;/ ')
+    sropqs = umkDoc.ninth_sropqs.split('/;-;/ ')
+    sroprs = umkDoc.ninth_sroprs.split('/;-;/ ')
 
     table = document.add_table(rows=1, cols=4)
     table.style = 'Table Grid'
@@ -518,9 +518,9 @@ def generateUmkFromWord(token):
     p.paragraph_format.first_line_indent = Pt(22.7)
     p.paragraph_format.line_spacing = 1
 
-    sross = umkDoc.ninth_sross.split('; ')
-    sroqs = umkDoc.ninth_sroqs.split('; ')
-    srors = umkDoc.ninth_srors.split('; ')
+    sross = umkDoc.ninth_sross.split('/;-;/ ')
+    sroqs = umkDoc.ninth_sroqs.split('/;-;/ ')
+    srors = umkDoc.ninth_srors.split('/;-;/ ')
 
     table = document.add_table(rows=1, cols=4)
     table.style = 'Table Grid'
@@ -553,7 +553,7 @@ def generateUmkFromWord(token):
     p.paragraph_format.first_line_indent = Pt(22.7)
     p.paragraph_format.line_spacing = 1
 
-    pws = umkDoc.tenth_pws.split('; ')
+    pws = umkDoc.tenth_pws.split('/;-;/ ')
 
     for i in range(umkDoc.tenth_counts):
         p = document.add_paragraph(str(i + 1) + '. ' + pws[i])
@@ -589,12 +589,12 @@ def generateUmkFromWord(token):
     p.paragraph_format.first_line_indent = Pt(22.7)
     p.paragraph_format.line_spacing = 1
 
-    gps = umkDoc.eleventh_gps.split('; ')
-    gpt = umkDoc.eleventh_gpt.split('; ')
-    gpf = umkDoc.eleventh_gpf.split('; ')
-    gpr = umkDoc.eleventh_gpr.split('; ')
-    gpd = umkDoc.eleventh_gpd.split('; ')
-    gpb = umkDoc.eleventh_gpb.split('; ')
+    gps = umkDoc.eleventh_gps.split('/;-;/ ')
+    gpt = umkDoc.eleventh_gpt.split('/;-;/ ')
+    gpf = umkDoc.eleventh_gpf.split('/;-;/ ')
+    gpr = umkDoc.eleventh_gpr.split('/;-;/ ')
+    gpd = umkDoc.eleventh_gpd.split('/;-;/ ')
+    gpb = umkDoc.eleventh_gpb.split('/;-;/ ')
 
     table = document.add_table(rows=1, cols=7)
     table.style = 'Table Grid'
@@ -636,7 +636,7 @@ def generateUmkFromWord(token):
     acLetters = ['A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'Fx', 'F']
     acNumbers = ['4,0', '3,67', '3,33', '3,0', '2,67', '2,33', '2,0', '1,67', '1,33', '1,0', '0,5', '0']
     acProcents = ['95-100', '90-94', '85-89', '80-84', '75-79', '70-74', '65-69', '60-64', '55-59', '50-54', '25-49', '0-24']
-    acTexts = umkDoc.twelfth_texts.split('; ')
+    acTexts = umkDoc.twelfth_texts.split('/;-;/ ')
 
     table = document.add_table(rows=1, cols=4)
     table.style = 'Table Grid'
@@ -655,9 +655,9 @@ def generateUmkFromWord(token):
 
     document.save('output/word/umk.docx')
 
-    generate_pdf("output/word/umk.docx", 'output/word/umk_without_sign')
+    generate_pdf("output/word/umk.docx", 'output/word')
 
-    original = PdfReader('output/word/umk_without_sign.pdf')
+    original = PdfReader('output/word/umk.pdf')
     demo = original.pages[0]
     sign = PdfReader('word/sign.pdf').pages[0]
     demo.merge_page(sign)

@@ -69,11 +69,11 @@ def generateUmkFromLatex(token):
 
     ##########################################################################################
 
-    themes = umkDoc.first_themes.split('; ')
-    lections = umkDoc.first_lections.split('; ')
-    seminars = umkDoc.first_seminars.split('; ')
-    srsps = umkDoc.first_srsps.split('; ')
-    srss = umkDoc.first_srss.split('; ')
+    themes = umkDoc.first_themes.split('/;-;/ ')
+    lections = umkDoc.first_lections.split('/;-;/ ')
+    seminars = umkDoc.first_seminars.split('/;-;/ ')
+    srsps = umkDoc.first_srsps.split('/;-;/ ')
+    srss = umkDoc.first_srss.split('/;-;/ ')
 
     tableText = (r'\begin{center}'
                  r'\begin{tabularx}{ \textwidth }{|M|Z|Z|Z|Z|M|M|}'
@@ -92,7 +92,7 @@ def generateUmkFromLatex(token):
 
     ##########################################################################################
 
-    lecturers = umkDoc.second_lecturers.split('; ')
+    lecturers = umkDoc.second_lecturers.split('/;-;/ ')
     lecturersText = ''
     for x in range(umkDoc.second_counts):
         lecturersText += fr'{lecturers[x]} \\' if (x != umkDoc.second_counts - 1) else fr'{lecturers[x]}'
@@ -107,8 +107,8 @@ def generateUmkFromLatex(token):
 
     ##########################################################################################
 
-    loss = umkDoc.third_los.split('; ')
-    methods = umkDoc.third_methods.split('; ')
+    loss = umkDoc.third_los.split('/;-;/ ')
+    methods = umkDoc.third_methods.split('/;-;/ ')
 
     losAndMethodsText = (r'\begin{center}'
                  r'\begin{tabularx}{ \textwidth }'
@@ -137,8 +137,8 @@ def generateUmkFromLatex(token):
 
     ##########################################################################################
 
-    bls = umkDoc.fifth_bls.split('; ')
-    als = umkDoc.fifth_als.split('; ')
+    bls = umkDoc.fifth_bls.split('/;-;/ ')
+    als = umkDoc.fifth_als.split('/;-;/ ')
 
     blAlText = (r'\begin{center}'
             r'\begin{tabularx}{ \textwidth }'
@@ -169,8 +169,8 @@ def generateUmkFromLatex(token):
 
     ##########################################################################################
 
-    lss = umkDoc.sixth_lss.split('; ')
-    lps = umkDoc.sixth_lps.split('; ')
+    lss = umkDoc.sixth_lss.split('/;-;/ ')
+    lps = umkDoc.sixth_lps.split('/;-;/ ')
 
     lssLpsText = (r'\begin{center}'
                 r'\begin{tabularx}{ \textwidth }'
@@ -194,10 +194,10 @@ def generateUmkFromLatex(token):
 
     ##########################################################################################
 
-    spss = umkDoc.seventh_spss.split('; ')
-    spqs = umkDoc.seventh_spqs.split('; ')
-    sprs = umkDoc.seventh_sprs.split('; ')
-    spls = umkDoc.seventh_spls.split('; ')
+    spss = umkDoc.seventh_spss.split('/;-;/ ')
+    spqs = umkDoc.seventh_spqs.split('/;-;/ ')
+    sprs = umkDoc.seventh_sprs.split('/;-;/ ')
+    spls = umkDoc.seventh_spls.split('/;-;/ ')
 
     splpText = (r'\begin{center}'
                 r'\begin{tabularx}{ \textwidth }'
@@ -224,10 +224,10 @@ def generateUmkFromLatex(token):
     ##########################################################################################
 
     if umkDoc.eighth_counts is not None and umkDoc.eighth_counts > 0:
-        slabs = umkDoc.eighth_slabs.split('; ')
-        qlabs = umkDoc.eighth_qlabs.split('; ')
-        rlabs = umkDoc.eighth_rlabs.split('; ')
-        llabs = umkDoc.eighth_llabs.split('; ')
+        slabs = umkDoc.eighth_slabs.split('/;-;/ ')
+        qlabs = umkDoc.eighth_qlabs.split('/;-;/ ')
+        rlabs = umkDoc.eighth_rlabs.split('/;-;/ ')
+        llabs = umkDoc.eighth_llabs.split('/;-;/ ')
 
         labText = (r'\begin{center}'
                     r'\begin{tabularx}{ \textwidth }'
@@ -255,12 +255,12 @@ def generateUmkFromLatex(token):
 
     ##########################################################################################
 
-    sropss = umkDoc.ninth_sropss.split('; ')
-    sropqs = umkDoc.ninth_sropqs.split('; ')
-    sroprs = umkDoc.ninth_sroprs.split('; ')
-    sross = umkDoc.ninth_sross.split('; ')
-    sroqs = umkDoc.ninth_sroqs.split('; ')
-    srors = umkDoc.ninth_srors.split('; ')
+    sropss = umkDoc.ninth_sropss.split('/;-;/ ')
+    sropqs = umkDoc.ninth_sropqs.split('/;-;/ ')
+    sroprs = umkDoc.ninth_sroprs.split('/;-;/ ')
+    sross = umkDoc.ninth_sross.split('/;-;/ ')
+    sroqs = umkDoc.ninth_sroqs.split('/;-;/ ')
+    srors = umkDoc.ninth_srors.split('/;-;/ ')
 
     sropText = (r'\begin{center}'
                 r'\begin{tabularx}{ \textwidth }'
@@ -305,7 +305,7 @@ def generateUmkFromLatex(token):
 
     ##########################################################################################
 
-    pws = umkDoc.tenth_pws.split('; ')
+    pws = umkDoc.tenth_pws.split('/;-;/ ')
     pwsText = ''
 
     for x in range(umkDoc.tenth_counts):
@@ -315,12 +315,12 @@ def generateUmkFromLatex(token):
 
     ##########################################################################################
 
-    gps = umkDoc.eleventh_gps.split('; ')
-    gpt = umkDoc.eleventh_gpt.split('; ')
-    gpf = umkDoc.eleventh_gpf.split('; ')
-    gpr = umkDoc.eleventh_gpr.split('; ')
-    gpd = umkDoc.eleventh_gpd.split('; ')
-    gpb = umkDoc.eleventh_gpb.split('; ')
+    gps = umkDoc.eleventh_gps.split('/;-;/ ')
+    gpt = umkDoc.eleventh_gpt.split('/;-;/ ')
+    gpf = umkDoc.eleventh_gpf.split('/;-;/ ')
+    gpr = umkDoc.eleventh_gpr.split('/;-;/ ')
+    gpd = umkDoc.eleventh_gpd.split('/;-;/ ')
+    gpb = umkDoc.eleventh_gpb.split('/;-;/ ')
 
     gpText = (r'\begin{center}'
             r'\begin{tabularx}{ \textwidth }'
@@ -348,7 +348,7 @@ def generateUmkFromLatex(token):
 
     ##########################################################################################
 
-    acTexts = umkDoc.twelfth_texts.split('; ')
+    acTexts = umkDoc.twelfth_texts.split('/;-;/ ')
 
     doc.preamble.append(NoEscape(r'\def\acAText{' + acTexts[0] + r'}'))
     doc.preamble.append(NoEscape(r'\def\acAMinusText{' + acTexts[1] + r'}'))
