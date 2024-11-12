@@ -2,7 +2,7 @@ services:
   karu-app:
     build:
       context: .
-    restart: always
+    restart: unless-stopped
     environment:
       DB_TYPE: mysql+pymysql
       DB_HOST: karu-db
@@ -17,7 +17,7 @@ services:
       - karu-db
   karu-db:
     image: mysql:8.0
-    restart: always
+    restart: unless-stopped
     environment:
       MYSQL_DATABASE: karu-docs
       MYSQL_USER: user

@@ -79,9 +79,6 @@ def generateUmkFromWord(token):
     srsps = umkDoc.first_srsps.split('/;-;/ ')
     srss = umkDoc.first_srss.split('/;-;/ ')
 
-    tableWidth = 170
-
-
     table = document.add_table(rows=1, cols=7)
     table.style = 'Table Grid'
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
@@ -255,6 +252,9 @@ def generateUmkFromWord(token):
     table = document.add_table(rows=1, cols=3)
     table.style = 'Table Grid'
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
+    table.columns[0].width = Mm(10)
+    table.columns[1].width = Mm(60)
+    table.columns[2].width = Mm(100)
     hdr_cells = table.rows[0].cells
     hdr_cells[0].text = '№'
     hdr_cells[1].text = translate('lo_outcomes', lang)
@@ -331,6 +331,8 @@ def generateUmkFromWord(token):
     table = document.add_table(rows=1, cols=2)
     table.style = 'Table Grid'
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
+    table.columns[0].width = Mm(10)
+    table.columns[1].width = Mm(160)
     hdr_cells = table.rows[0].cells
     hdr_cells[0].text = '№'
     hdr_cells[1].text = translate('sources_course', lang)
@@ -377,6 +379,9 @@ def generateUmkFromWord(token):
     table = document.add_table(rows=1, cols=3)
     table.style = 'Table Grid'
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
+    table.columns[0].width = Mm(10)
+    table.columns[1].width = Mm(60)
+    table.columns[2].width = Mm(100)
     hdr_cells = table.rows[0].cells
     hdr_cells[0].text = '№'
     hdr_cells[1].text = translate('lecture_topic', lang)
@@ -411,6 +416,11 @@ def generateUmkFromWord(token):
     table = document.add_table(rows=1, cols=5)
     table.style = 'Table Grid'
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
+    table.columns[0].width = Mm(10)
+    table.columns[1].width = Mm(30)
+    table.columns[2].width = Mm(70)
+    table.columns[3].width = Mm(40)
+    table.columns[4].width = Mm(20)
     hdr_cells = table.rows[0].cells
     hdr_cells[0].text = '№'
     hdr_cells[1].text = translate('practical_topic', lang)
@@ -449,6 +459,10 @@ def generateUmkFromWord(token):
         table = document.add_table(rows=1, cols=4)
         table.style = 'Table Grid'
         table.alignment = WD_TABLE_ALIGNMENT.CENTER
+        table.columns[0].width = Mm(10)
+        table.columns[1].width = Mm(40)
+        table.columns[2].width = Mm(80)
+        table.columns[3].width = Mm(40)
         hdr_cells = table.rows[0].cells
         hdr_cells[0].text = '№'
         hdr_cells[1].text = translate('laboratory_topic', lang)
@@ -490,6 +504,10 @@ def generateUmkFromWord(token):
     table = document.add_table(rows=1, cols=4)
     table.style = 'Table Grid'
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
+    table.columns[0].width = Mm(10)
+    table.columns[1].width = Mm(30)
+    table.columns[2].width = Mm(80)
+    table.columns[3].width = Mm(50)
     hdr_cells = table.rows[0].cells
     hdr_cells[0].text = '№'
     hdr_cells[1].text = translate('iwst_topic', lang)
@@ -525,6 +543,10 @@ def generateUmkFromWord(token):
     table = document.add_table(rows=1, cols=4)
     table.style = 'Table Grid'
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
+    table.columns[0].width = Mm(10)
+    table.columns[1].width = Mm(30)
+    table.columns[2].width = Mm(90)
+    table.columns[3].width = Mm(40)
     hdr_cells = table.rows[0].cells
     hdr_cells[0].text = '№'
     hdr_cells[1].text = translate('iws_topic', lang)
@@ -599,6 +621,13 @@ def generateUmkFromWord(token):
     table = document.add_table(rows=1, cols=7)
     table.style = 'Table Grid'
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
+    table.columns[0].width = Mm(10)
+    table.columns[1].width = Mm(35)
+    table.columns[2].width = Mm(25)
+    table.columns[3].width = Mm(25)
+    table.columns[4].width = Mm(25)
+    table.columns[5].width = Mm(25)
+    table.columns[6].width = Mm(25)
     hdr_cells = table.rows[0].cells
     hdr_cells[0].text = '№'
     hdr_cells[1].text = translate('ep_theme', lang)
@@ -641,6 +670,10 @@ def generateUmkFromWord(token):
     table = document.add_table(rows=1, cols=4)
     table.style = 'Table Grid'
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
+    table.columns[0].width = Mm(25)
+    table.columns[1].width = Mm(25)
+    table.columns[2].width = Mm(25)
+    table.columns[3].width = Mm(95)
     hdr_cells = table.rows[0].cells
     hdr_cells[0].text = translate('ac_marking', lang)
     hdr_cells[1].text = translate('ac_points', lang)
@@ -652,6 +685,45 @@ def generateUmkFromWord(token):
         row_cells[1].text = acNumbers[i]
         row_cells[2].text = acProcents[i]
         row_cells[3].text = acTexts[i]
+
+    document.save('output/word/umk.docx')
+
+    generate_pdf("output/word/umk.docx", 'output/word')
+
+    document.add_page_break()
+
+    p = document.add_paragraph('CONTENT OF SYLLABUS')
+    p.paragraph_format.space_after = Pt(0)
+    p.paragraph_format.first_line_indent = Pt(22.7)
+    p.paragraph_format.line_spacing = 1
+    p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+
+    p = document.add_paragraph()
+    p.paragraph_format.space_after = Pt(0)
+    p.paragraph_format.first_line_indent = Pt(22.7)
+    p.paragraph_format.line_spacing = 1
+
+    table = document.add_table(rows=1, cols=3)
+    table.style = 'Table Grid'
+    table.alignment = WD_TABLE_ALIGNMENT.CENTER
+    table.columns[0].width = Mm(15)
+    table.columns[1].width = Mm(140)
+    table.columns[2].width = Mm(15)
+    hdr_cells = table.rows[0].cells
+    # hdr_cells[0].text = translate('ac_marking', lang)
+    # hdr_cells[1].text = translate('ac_points', lang)
+    # hdr_cells[2].text = translate('ac_percentage', lang)
+    hdr_cells[0].text = 'No'
+    hdr_cells[1].text = 'Name'
+    hdr_cells[2].text = 'Page'
+    i = 1
+    for name, page in getHeadingsPageNumbers(lang).items():
+        split = name.split(' ', 1)
+        row_cells = table.add_row().cells
+        row_cells[0].text = split[0]
+        row_cells[1].text = split[1]
+        row_cells[2].text = str(page)
+        i = i + 1
 
     document.save('output/word/umk.docx')
 
@@ -671,6 +743,33 @@ def generateUmkFromWord(token):
         writer.write(outFile)
 
     return token
+
+def getHeadingsPageNumbers(lang):
+    resPages = {}
+
+    for page in PdfReader('output/word/umk.pdf').pages:
+        formattedText = page.extract_text().replace('\n', ' ').replace('  ', ' ')
+
+        if formattedText.find(translate('thematic_plan', lang)) > -1: resPages[translate('thematic_plan', lang)] = page.page_number
+        if formattedText.find(translate('teacher_data', lang)) > -1: resPages[translate('teacher_data', lang)] = page.page_number
+        if formattedText.find(translate('course_policy', lang)) > -1: resPages[translate('course_policy', lang)] = page.page_number
+        if formattedText.find(translate('course_prerequisites', lang)) > -1: resPages[translate('course_prerequisites', lang)] = page.page_number
+        if formattedText.find(translate('course_postrequisites', lang)) > -1: resPages[translate('course_postrequisites', lang)] = page.page_number
+        if formattedText.find(translate('description', lang)) > -1: resPages[translate('description', lang)] = page.page_number
+        if formattedText.find(translate('outcomes_and_methods', lang)) > -1: resPages[translate('outcomes_and_methods', lang)] = page.page_number
+        if formattedText.find(translate('teaching_methods', lang)) > -1: resPages[translate('teaching_methods', lang)] = page.page_number
+        if formattedText.find(translate('methods_for_lo', lang)) > -1: resPages[translate('methods_for_lo', lang)] = page.page_number
+        if formattedText.find(translate('sources', lang)) > -1: resPages[translate('sources', lang)] = page.page_number
+        if formattedText.find(translate('lecture', lang)) > -1: resPages[translate('lecture', lang)] = page.page_number
+        if formattedText.find(translate('practical', lang)) > -1: resPages[translate('practical', lang)] = page.page_number
+        if formattedText.find(translate('laboratory', lang)) > -1: resPages[translate('laboratory', lang)] = page.page_number
+        if formattedText.find(translate('iwst', lang)) > -1: resPages[translate('iwst', lang)] = page.page_number
+        if formattedText.find(translate('iws', lang)) > -1: resPages[translate('iws', lang)] = page.page_number
+        if formattedText.find(translate('paper_topics', lang)) > -1: resPages[translate('paper_topics', lang)] = page.page_number
+        if formattedText.find(translate('evaluation_policy', lang)) > -1: resPages[translate('evaluation_policy', lang)] = page.page_number
+        if formattedText.find(translate('assessment_criteria', lang)) > -1: resPages[translate('assessment_criteria', lang)] = page.page_number
+
+    return resPages
 
 def generate_pdf(doc_path, path):
     subprocess.call(['soffice',
