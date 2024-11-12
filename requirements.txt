@@ -3,7 +3,7 @@ gunicorn
 pylatex
 Flask-SQLAlchemy
 PyMySQL
-psycopg2
+psycopg2-binary
 cryptography
 python-docx
 pypdf
