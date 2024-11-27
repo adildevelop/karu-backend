@@ -1,4 +1,5 @@
 import subprocess
+import math2docx
 
 from docx import Document
 from docx.shared import Mm, Pt
@@ -429,9 +430,16 @@ def generateUmkFromWord(token):
     hdr_cells[4].text = translate('practical_link', lang)
     for i in range(umkDoc.seventh_counts):
         row_cells = table.add_row().cells
+        spqsText = '\\begin{multline}' + spqs[i] + '\\end{multline}';
+        formula = r"""
+                \begin{multline*}
+                f(x) = \sin(x + \pi) \cdot i \cdot 5^2 + \int0^\infty x^2 dx + x + 6x\\ + \sum{i=0}^\infty \frac{1}{i!}
+                \end{multline*}
+                """
+        print(spqsText, flush=True)
         row_cells[0].text = str(i + 1)
         row_cells[1].text = spss[i]
-        row_cells[2].text = spqs[i]
+        math2docx.add_math(row_cells[2].paragraphs[0], formula)
         row_cells[3].text = sprs[i]
         row_cells[4].text = spls[i]
 

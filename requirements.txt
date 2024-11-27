@@ -7,3 +7,4 @@ psycopg2-binary
 cryptography
 python-docx
 pypdf
+math2docx
