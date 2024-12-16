@@ -15,10 +15,11 @@ def dokladnoi():
     input_department = request.args.get('department', '')
     input_group = request.args.get('group', '')
     input_lesson_name = request.args.get('lesson_name', '')
+    input_lesson_type = request.args.get('lesson_type', '')
     input_start_time = request.args.get('start_time', '')
     input_end_time = request.args.get('end_time', '')
 
-    generateDokladnoiFromWord(input_name, input_date, input_faculty, input_dean, input_department, input_group, input_lesson_name, input_start_time, input_end_time)
+    generateDokladnoiFromWord(input_name, input_date, input_faculty, input_dean, input_department, input_group, input_lesson_name, input_lesson_type, input_start_time, input_end_time)
 
     return send_file('output/word/dokladnoi.pdf')
 

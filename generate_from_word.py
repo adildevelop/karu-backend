@@ -9,7 +9,7 @@ from pypdf import PdfWriter, PdfReader
 from umk import Umk
 from translation import translate
 
-def generateDokladnoiFromWord(name, date, faculty, dean, department, group, lesson_name, start_time, end_time):
+def generateDokladnoiFromWord(name, date, faculty, dean, department, group, lesson_name, lesson_type, start_time, end_time):
     document = Document()
     section = document.sections[0]
     section.page_height = Mm(297)
@@ -38,7 +38,7 @@ def generateDokladnoiFromWord(name, date, faculty, dean, department, group, less
     p.paragraph_format.line_spacing = 1
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
 
-    p = document.add_paragraph(f'Довожу до Вашего сведения, что группа {group} не явилась на практические занятия с {start_time}-{end_time} {date} числа по дисциплине "{lesson_name}".\n\n\n\n\n')
+    p = document.add_paragraph(f'Довожу до Вашего сведения, что группа {group} не явилась на {lesson_type} занятия с {start_time} по {end_time} {date} числа по дисциплине "{lesson_name}".\n\n\n\n\n')
     p.paragraph_format.space_after = Pt(0)
     p.paragraph_format.first_line_indent = Pt(22.7)
     p.paragraph_format.line_spacing = 1
