@@ -1,5 +1,4 @@
-import subprocess
-import math2docx
+import subprocess, math2docx, re
 
 from docx import Document
 from docx.shared import Mm, Pt
@@ -9,6 +8,53 @@ from pypdf import PdfWriter, PdfReader
 
 from umk import Umk
 from translation import translate
+
+def generateDokladnoiFromWord(name, date, faculty, dean, department, group, lesson_name, start_time, end_time):
+    document = Document()
+    section = document.sections[0]
+    section.page_height = Mm(297)
+    section.page_width = Mm(210)
+    section.left_margin = Mm(20)
+    section.right_margin = Mm(20)
+    section.top_margin = Mm(15)
+    section.bottom_margin = Mm(15)
+
+    style = document.styles['Normal']
+    font = style.font
+    font.name = 'Times New Roman'
+    font.size = Pt(12)
+
+    table = document.add_table(rows=1, cols=3)
+    table.alignment = WD_TABLE_ALIGNMENT.CENTER
+    hdr_cells = table.rows[0].cells
+    hdr_cells[0].text = ''
+    hdr_cells[1].text = ''
+    hdr_cells[2].text = f'Декану {faculty}\n{dean}'
+    hdr_cells[2].paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.RIGHT
+
+    p = document.add_paragraph(f'\n\n\n\n\n\n\n\n\n\nДокладная\n')
+    p.paragraph_format.space_after = Pt(0)
+    p.paragraph_format.first_line_indent = Pt(22.7)
+    p.paragraph_format.line_spacing = 1
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+    p = document.add_paragraph(f'Довожу до Вашего сведения, что группа {group} не явилась на практические занятия с {start_time}-{end_time} {date} числа по дисциплине "{lesson_name}".\n\n\n\n\n')
+    p.paragraph_format.space_after = Pt(0)
+    p.paragraph_format.first_line_indent = Pt(22.7)
+    p.paragraph_format.line_spacing = 1
+    p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+
+    table = document.add_table(rows=1, cols=3)
+    table.alignment = WD_TABLE_ALIGNMENT.CENTER
+    hdr_cells = table.rows[0].cells
+    hdr_cells[0].text = f'Преподаватель кафедры {department}'
+    hdr_cells[1].text = ''
+    hdr_cells[2].text = f'{name}'
+    hdr_cells[2].paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.RIGHT
+
+    document.save('output/word/dokladnoi.docx')
+
+    generate_pdf("output/word/dokladnoi.docx", 'output/word')
 
 def generateUmkFromWord(token):
     umkDoc = Umk.query.filter_by(token=token).first()
@@ -111,11 +157,11 @@ def generateUmkFromWord(token):
     row_cells = table.add_row().cells
     row_cells[0].text = ''
     row_cells[1].text = translate('t_total', lang)
-    row_cells[2].text = str(sum(map(int, lections)))
-    row_cells[3].text = str(sum(map(int, seminars)))
-    row_cells[4].text = str(sum(map(int, labs)))
-    row_cells[5].text = str(sum(map(int, srsps)))
-    row_cells[6].text = str(sum(map(int, srss)))
+    row_cells[2].text = str(sum(map(int, list(filter(None, lections)))))
+    row_cells[3].text = str(sum(map(int, list(filter(None, seminars)))))
+    row_cells[4].text = str(sum(map(int, list(filter(None, labs)))))
+    row_cells[5].text = str(sum(map(int, list(filter(None, srsps)))))
+    row_cells[6].text = str(sum(map(int, list(filter(None, srss)))))
 
     p = document.add_paragraph()
     p.paragraph_format.space_after = Pt(0)
@@ -429,18 +475,41 @@ def generateUmkFromWord(token):
     hdr_cells[3].text = translate('practical_recommendation', lang)
     hdr_cells[4].text = translate('practical_link', lang)
     for i in range(umkDoc.seventh_counts):
+        spqsArray = re.split('\[:(.*?)\:]', spqs[i])
+        spqsModifiedArray = re.sub('\[:(.*?)\:]', '-:-formula-:-', spqs[i]).split('-:-')
+        isSpqsFirstLine = True
+        sprsArray = re.split('\[:(.*?)\:]', sprs[i])
+        sprsModifiedArray = re.sub('\[:(.*?)\:]', '-:-formula-:-', sprs[i]).split('-:-')
+        isSprsFirstLine = True
         row_cells = table.add_row().cells
-        spqsText = '\\begin{multline}' + spqs[i] + '\\end{multline}';
-        formula = r"""
-                \begin{multline*}
-                f(x) = \sin(x + \pi) \cdot i \cdot 5^2 + \int0^\infty x^2 dx + x + 6x\\ + \sum{i=0}^\infty \frac{1}{i!}
-                \end{multline*}
-                """
-        print(spqsText, flush=True)
         row_cells[0].text = str(i + 1)
         row_cells[1].text = spss[i]
-        math2docx.add_math(row_cells[2].paragraphs[0], formula)
-        row_cells[3].text = sprs[i]
+        for j in range(len(spqsArray)):
+            if spqsModifiedArray[j] == '' or spqsModifiedArray[j] == '\n': continue
+            if isSpqsFirstLine:
+                if spqsModifiedArray[j] == 'formula':
+                    math2docx.add_math(row_cells[2].paragraphs[0], spqsArray[j].replace('\\\\', '\\'))
+                else:
+                    row_cells[2].text = spqsArray[j].strip('\n')
+                isSpqsFirstLine = False
+            else:
+                if spqsModifiedArray[j] == 'formula':
+                    math2docx.add_math(row_cells[2].add_paragraph(), spqsArray[j].replace('\\\\', '\\'))
+                else:
+                    row_cells[2].add_paragraph(spqsArray[j].strip('\n'))
+        for j in range(len(sprsArray)):
+            if sprsModifiedArray[j] == '' or sprsModifiedArray[j] == '\n': continue
+            if isSprsFirstLine:
+                if sprsModifiedArray[j] == 'formula':
+                    math2docx.add_math(row_cells[3].paragraphs[0], sprsArray[j].replace('\\\\', '\\'))
+                else:
+                    row_cells[3].text = sprsArray[j].strip('\n')
+                isSprsFirstLine = False
+            else:
+                if sprsModifiedArray[j] == 'formula':
+                    math2docx.add_math(row_cells[3].add_paragraph(), sprsArray[j].replace('\\\\', '\\'))
+                else:
+                    row_cells[3].add_paragraph(sprsArray[j].strip('\n'))
         row_cells[4].text = spls[i]
 
     p = document.add_paragraph()
@@ -477,11 +546,41 @@ def generateUmkFromWord(token):
         hdr_cells[2].text = translate('laboratory_task', lang)
         hdr_cells[3].text = translate('laboratory_recommendation', lang)
         for i in range(umkDoc.eighth_counts):
+            qlabsArray = re.split('\[:(.*?)\:]', qlabs[i])
+            qlabsModifiedArray = re.sub('\[:(.*?)\:]', '-:-formula-:-', qlabs[i]).split('-:-')
+            isQlabsFirstLine = True
+            rlabsArray = re.split('\[:(.*?)\:]', rlabs[i])
+            rlabsModifiedArray = re.sub('\[:(.*?)\:]', '-:-formula-:-', rlabs[i]).split('-:-')
+            isRlabsFirstLine = True
             row_cells = table.add_row().cells
             row_cells[0].text = str(i + 1)
             row_cells[1].text = slabs[i]
-            row_cells[2].text = qlabs[i]
-            row_cells[3].text = rlabs[i]
+            for j in range(len(qlabsArray)):
+                if qlabsModifiedArray[j] == '' or qlabsModifiedArray[j] == '\n': continue
+                if isQlabsFirstLine:
+                    if qlabsModifiedArray[j] == 'formula':
+                        math2docx.add_math(row_cells[2].paragraphs[0], qlabsArray[j].replace('\\\\', '\\'))
+                    else:
+                        row_cells[2].text = qlabsArray[j].strip('\n')
+                    isQlabsFirstLine = False
+                else:
+                    if qlabsModifiedArray[j] == 'formula':
+                        math2docx.add_math(row_cells[2].add_paragraph(), qlabsArray[j].replace('\\\\', '\\'))
+                    else:
+                        row_cells[2].add_paragraph(qlabsArray[j].strip('\n'))
+            for j in range(len(rlabsArray)):
+                if rlabsModifiedArray[j] == '' or rlabsModifiedArray[j] == '\n': continue
+                if isRlabsFirstLine:
+                    if rlabsModifiedArray[j] == 'formula':
+                        math2docx.add_math(row_cells[3].paragraphs[0], rlabsArray[j].replace('\\\\', '\\'))
+                    else:
+                        row_cells[3].text = rlabsArray[j].strip('\n')
+                    isRlabsFirstLine = False
+                else:
+                    if rlabsModifiedArray[j] == 'formula':
+                        math2docx.add_math(row_cells[3].add_paragraph(), rlabsArray[j].replace('\\\\', '\\'))
+                    else:
+                        row_cells[3].add_paragraph(rlabsArray[j].strip('\n'))
     else:
         p = document.add_paragraph(translate('laboratory_not_provided', lang))
         p.paragraph_format.space_after = Pt(0)
@@ -522,10 +621,25 @@ def generateUmkFromWord(token):
     hdr_cells[2].text = translate('iwst_task', lang)
     hdr_cells[3].text = translate('iwst_recommendation', lang)
     for i in range(umkDoc.ninth_srop_counts):
+        sropqsArray = re.split('\[:(.*?)\:]', sropqs[i])
+        sropqsModifiedArray = re.sub('\[:(.*?)\:]', '-:-formula-:-', sropqs[i]).split('-:-')
+        isSropqsFirstLine = True
         row_cells = table.add_row().cells
         row_cells[0].text = str(i + 1)
         row_cells[1].text = sropss[i]
-        row_cells[2].text = sropqs[i]
+        for j in range(len(sropqsArray)):
+            if sropqsModifiedArray[j] == '' or sropqsModifiedArray[j] == '\n': continue
+            if isSropqsFirstLine:
+                if sropqsModifiedArray[j] == 'formula':
+                    math2docx.add_math(row_cells[2].paragraphs[0], sropqsArray[j].replace('\\\\', '\\'))
+                else:
+                    row_cells[2].text = sropqsArray[j].strip('\n')
+                isSropqsFirstLine = False
+            else:
+                if sropqsModifiedArray[j] == 'formula':
+                    math2docx.add_math(row_cells[2].add_paragraph(), sropqsArray[j].replace('\\\\', '\\'))
+                else:
+                    row_cells[2].add_paragraph(sropqsArray[j].strip('\n'))
         row_cells[3].text = sroprs[i]
 
     p = document.add_paragraph()
@@ -561,10 +675,25 @@ def generateUmkFromWord(token):
     hdr_cells[2].text = translate('iws_task', lang)
     hdr_cells[3].text = translate('iws_recommendation', lang)
     for i in range(umkDoc.ninth_sro_counts):
+        sroqsArray = re.split('\[:(.*?)\:]', sroqs[i])
+        sroqsModifiedArray = re.sub('\[:(.*?)\:]', '-:-formula-:-', sroqs[i]).split('-:-')
+        isSroqsFirstLine = True
         row_cells = table.add_row().cells
         row_cells[0].text = str(i + 1)
         row_cells[1].text = sross[i]
-        row_cells[2].text = sroqs[i]
+        for j in range(len(sroqsArray)):
+            if sroqsModifiedArray[j] == '' or sroqsModifiedArray[j] == '\n': continue
+            if isSroqsFirstLine:
+                if sroqsModifiedArray[j] == 'formula':
+                    math2docx.add_math(row_cells[2].paragraphs[0], sroqsArray[j].replace('\\\\', '\\'))
+                else:
+                    row_cells[2].text = sroqsArray[j].strip('\n')
+                isSroqsFirstLine = False
+            else:
+                if sroqsModifiedArray[j] == 'formula':
+                    math2docx.add_math(row_cells[2].add_paragraph(), sroqsArray[j].replace('\\\\', '\\'))
+                else:
+                    row_cells[2].add_paragraph(sroqsArray[j].strip('\n'))
         row_cells[3].text = srors[i]
 
     p = document.add_paragraph()
@@ -700,7 +829,7 @@ def generateUmkFromWord(token):
 
     document.add_page_break()
 
-    p = document.add_paragraph('CONTENT OF SYLLABUS')
+    p = document.add_paragraph(translate('content', lang))
     p.paragraph_format.space_after = Pt(0)
     p.paragraph_format.first_line_indent = Pt(22.7)
     p.paragraph_format.line_spacing = 1
@@ -718,12 +847,9 @@ def generateUmkFromWord(token):
     table.columns[1].width = Mm(140)
     table.columns[2].width = Mm(15)
     hdr_cells = table.rows[0].cells
-    # hdr_cells[0].text = translate('ac_marking', lang)
-    # hdr_cells[1].text = translate('ac_points', lang)
-    # hdr_cells[2].text = translate('ac_percentage', lang)
-    hdr_cells[0].text = 'No'
-    hdr_cells[1].text = 'Name'
-    hdr_cells[2].text = 'Page'
+    hdr_cells[0].text = '№'
+    hdr_cells[1].text = translate('content_name', lang)
+    hdr_cells[2].text = translate('content_page', lang)
     i = 1
     for name, page in getHeadingsPageNumbers(lang).items():
         split = name.split(' ', 1)

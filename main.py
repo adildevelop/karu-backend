@@ -2,8 +2,7 @@ from flask import request, send_file, jsonify
 from init import create_app
 from extensions import db
 from umk import createUmk, updateUmkIndex, updateUmkFirst, updateUmkSecond, updateUmkThird, updateUmkFourth, updateUmkFifth, updateUmkSixth, updateUmkSeventh, updateUmkEighth, updateUmkNinth, updateUmkTenth, updateUmkEleventh, updateUmkTwelfth
-from generate_from_latex import generateDokladnoiFromLatex
-from generate_from_word import generateUmkFromWord
+from generate_from_word import generateUmkFromWord, generateDokladnoiFromWord
 
 app = create_app()
 
@@ -19,9 +18,9 @@ def dokladnoi():
     input_start_time = request.args.get('start_time', '')
     input_end_time = request.args.get('end_time', '')
 
-    generateDokladnoiFromLatex(input_name, input_date, input_faculty, input_dean, input_department, input_group, input_lesson_name, input_start_time, input_end_time)
+    generateDokladnoiFromWord(input_name, input_date, input_faculty, input_dean, input_department, input_group, input_lesson_name, input_start_time, input_end_time)
 
-    return send_file('output/latex/dokladnoi.pdf')
+    return send_file('output/word/dokladnoi.pdf')
 
 @app.route("/umk", methods = ['POST'])
 def umk():
