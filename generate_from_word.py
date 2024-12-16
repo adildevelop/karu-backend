@@ -38,7 +38,13 @@ def generateDokladnoiFromWord(name, date, faculty, dean, department, group, less
     p.paragraph_format.line_spacing = 1
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
 
-    p = document.add_paragraph(f'Довожу до Вашего сведения, что группа {group} не явилась на {lesson_type} занятия с {start_time} по {end_time} {date} числа по дисциплине "{lesson_name}".\n\n\n\n\n')
+    p = document.add_paragraph(f'Довожу до Вашего сведения, что группа {group} не явилась на {lesson_type} занятия с {start_time} по {end_time} {date} числа по дисциплине "{lesson_name}".')
+    p.paragraph_format.space_after = Pt(0)
+    p.paragraph_format.first_line_indent = Pt(22.7)
+    p.paragraph_format.line_spacing = 1
+    p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+
+    p = document.add_paragraph('\n\n\n\n')
     p.paragraph_format.space_after = Pt(0)
     p.paragraph_format.first_line_indent = Pt(22.7)
     p.paragraph_format.line_spacing = 1
