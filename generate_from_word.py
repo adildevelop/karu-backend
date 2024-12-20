@@ -106,9 +106,9 @@ def generateUmkFromWord(token):
                                + translate('duration', lang) + ': ' + umkDoc.studyTime + '\n'
                                + translate('credits', lang) + ': ' + umkDoc.credits + '\n\n\n\n\n\n\n\n\n\n'
                                + translate('department_approval_part_one', lang) + '\n'
-                               + translate('department_approval_part_two', lang) + '\n\n'
+                               + translate('department_approval_part_two', lang).format(department_protocol = umkDoc.department_protocol, department_date = umkDoc.department_date) + '\n\n'
                                + translate('faculty_meeting_part_one', lang) + '\n'
-                               + translate('faculty_meeting_part_two', lang))
+                               + translate('faculty_meeting_part_two', lang).format(faculty_protocol = umkDoc.faculty_protocol, faculty_date = umkDoc.faculty_date))
     p.paragraph_format.space_after = Pt(0)
     p.paragraph_format.line_spacing = 1
 
@@ -869,18 +869,18 @@ def generateUmkFromWord(token):
 
     generate_pdf("output/word/umk.docx", 'output/word')
 
-    original = PdfReader('output/word/umk.pdf')
-    demo = original.pages[0]
-    sign = PdfReader('word/sign.pdf').pages[0]
-    demo.merge_page(sign)
-
-    writer = PdfWriter()
-
-    for page in original.pages:
-        writer.add_page(page)
-
-    with open("output/word/umk.pdf", "wb") as outFile:
-        writer.write(outFile)
+    # original = PdfReader('output/word/umk.pdf')
+    # demo = original.pages[0]
+    # sign = PdfReader('word/sign.pdf').pages[0]
+    # demo.merge_page(sign)
+    #
+    # writer = PdfWriter()
+    #
+    # for page in original.pages:
+    #     writer.add_page(page)
+    #
+    # with open("output/word/umk.pdf", "wb") as outFile:
+    #     writer.write(outFile)
 
     return token
 

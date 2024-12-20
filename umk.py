@@ -12,6 +12,10 @@ class Umk(db.Model):
     course = db.Column(db.String(255), nullable=True)
     studyTime = db.Column(db.String(255), nullable=True)
     credits = db.Column(db.String(255), nullable=True)
+    department_protocol = db.Column(db.String(255), nullable=True)
+    department_date = db.Column(db.String(255), nullable=True)
+    faculty_protocol = db.Column(db.String(255), nullable=True)
+    faculty_date = db.Column(db.String(255), nullable=True)
     first_counts = db.Column(db.Integer, nullable=True)
     first_themes = db.Column(db.Text, nullable=True)
     first_lections = db.Column(db.String(255), nullable=True)
@@ -81,7 +85,7 @@ def createUmk(language):
 
     return rand_token
 
-def updateUmkIndex(token, faculty, department, subject, group, course, study_time, credits):
+def updateUmkIndex(token, faculty, department, subject, group, course, study_time, credits, department_protocol, department_date, faculty_protocol, faculty_date):
     umk = Umk.query.filter_by(token=token).first()
     umk.faculty = faculty
     umk.department = department
@@ -90,6 +94,10 @@ def updateUmkIndex(token, faculty, department, subject, group, course, study_tim
     umk.course = course
     umk.studyTime = study_time
     umk.credits = credits
+    umk.department_protocol = department_protocol
+    umk.department_date = department_date
+    umk.faculty_protocol = faculty_protocol
+    umk.faculty_date = faculty_date
 
     db.session.add(umk)
     db.session.commit()

@@ -41,8 +41,12 @@ def umk_index():
     input_course = request.form.get('course', '')
     input_study_time = request.form.get('study_time', '')
     input_credits = request.form.get('credits', '')
+    input_department_protocol = request.form.get('department_protocol', '')
+    input_department_date = request.form.get('department_date', '')
+    input_faculty_protocol = request.form.get('faculty_protocol', '')
+    input_faculty_date = request.form.get('faculty_date', '')
 
-    updateUmkIndex(token, input_faculty, input_department, input_subject, input_group, input_course, input_study_time, input_credits)
+    updateUmkIndex(token, input_faculty, input_department, input_subject, input_group, input_course, input_study_time, input_credits, input_department_protocol, input_department_date, input_faculty_protocol, input_faculty_date)
 
     return jsonify(success=True)
 
